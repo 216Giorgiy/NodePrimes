@@ -29,16 +29,27 @@ Primes.prototype.sieve = function() {
         }
         return index;
     }
+
     // make first unknown value PRIME
     var firstUnknownIndex = getFirstElementWithState(this.candidates, CandidateStates.UNKNOWN);
     var foundPrime = 0;
-    if(firstUnknownIndex > 0) {
-        this.candidates[firstUnknownIndex].state = CandidateStates.PRIME;
-        foundPrime = this.candidates[firstUnknownIndex].value;
+    while(firstUnknownIndex <= Math.sqrt(this.maxValue)) {
+        if (firstUnknownIndex > 0) {
+            this.candidates[firstUnknownIndex].state = CandidateStates.PRIME;
+            foundPrime = this.candidates[firstUnknownIndex].value;
+        }
+        // iterate over candidates incrementing by foundPrime and mark NotPrime
+        for (var i = firstUnknownIndex + foundPrime; i < this.candidates.length; i += foundPrime) {
+            this.candidates[i].state = CandidateStates.NOTPRIME;
+        }
+        firstUnknownIndex = getFirstElementWithState(this.candidates, CandidateStates.UNKNOWN);
     }
-    // iterate over candidates incrementing by foundPrime and mark NotPrime
-    for(var i=firstUnknownIndex+foundPrime;i<this.candidates.length;i+=foundPrime) {
-        this.candidates[i].state = CandidateStates.NOTPRIME;
+    // mark remaining unknowns as prime
+    for(var i=firstUnknownIndex;i<this.candidates.length;i++)
+    {
+        if(this.candidates[i].state===CandidateStates.UNKNOWN) {
+            this.candidates[i].state = CandidateStates.PRIME;
+        }
     }
 }
 

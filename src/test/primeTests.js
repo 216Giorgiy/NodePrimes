@@ -15,12 +15,29 @@ describe('Primes', function() {
             assert.equal(maxValue-1, myPrimes.countByState(CandidateStates.UNKNOWN))
         })
     });
+    describe('when sieve is called on primes with maxValue 5', function() {
+        var maxValue = 5;
+        var myPrimes = new primes.Primes(maxValue);
+        myPrimes.sieve();
+        it('should find 3 primes', function() {
+            assert.equal(3, myPrimes.countByState(CandidateStates.PRIME))
+        })
+        it('should find 1 non-primes', function() {
+            assert.equal(1, myPrimes.countByState(CandidateStates.NOTPRIME))
+        })
+    })
     describe('when sieve is called on primes with maxValue 100', function() {
         var maxValue = 100;
         var myPrimes = new primes.Primes(maxValue);
         myPrimes.sieve();
-        it('should find one prime', function() {
-            assert.equal(1, myPrimes.countByState(CandidateStates.PRIME))
+        it('should find 25 primes', function() {
+            assert.equal(25, myPrimes.countByState(CandidateStates.PRIME))
+        })
+        it('should find 74 non-primes', function() {
+            assert.equal(74, myPrimes.countByState(CandidateStates.NOTPRIME))
+        })
+        it('should mark 97 as prime', function() {
+            assert.equal(CandidateStates.PRIME, myPrimes.candidates[97].state);
         })
     })
 });
