@@ -2,7 +2,7 @@ var assert = require("assert");
 var primes = require("../primes.js");
 
 describe('Primes', function() {
-    describe('when initially created with maxValue 100', function() {
+    describe('when initially created with maxValue 100!!!', function() {
         var maxValue = 100;
         var myPrimes = new primes.Primes(maxValue);
         it('should have max value 100', function() {
