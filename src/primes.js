@@ -37,11 +37,6 @@ Primes.prototype.sieve = function() {
             }
         }
     }
-
-    var firstUnknownIndex = getFirstElementWithState(this.candidates, CandidateStates.UNKNOWN);
-
-    var foundPrime = 0;
-
     function markIncrementsOfFoundPrimeAsNotPrime() {
         for (var i = firstUnknownIndex + foundPrime; i < this.candidates.length; i += foundPrime) {
             this.candidates[i].state = CandidateStates.NOTPRIME;
@@ -49,14 +44,21 @@ Primes.prototype.sieve = function() {
         return i;
     }
 
-    while(firstUnknownIndex <= Math.sqrt(this.maxValue)) {
-        if (firstUnknownIndex > 0) {
-            this.candidates[firstUnknownIndex].state = CandidateStates.PRIME;
-            foundPrime = this.candidates[firstUnknownIndex].value;
+    var foundPrime=0;
+    var firstUnknownIndex = getFirstElementWithState(this.candidates, CandidateStates.UNKNOWN);
+
+    function markFirstUnknownCandidatePrime() {
+        while (firstUnknownIndex <= Math.sqrt(this.maxValue)) {
+            if (firstUnknownIndex > 0) {
+                this.candidates[firstUnknownIndex].state = CandidateStates.PRIME;
+                foundPrime = this.candidates[firstUnknownIndex].value;
+            }
+            markIncrementsOfFoundPrimeAsNotPrime.call(this);
+            firstUnknownIndex = getFirstElementWithState(this.candidates, CandidateStates.UNKNOWN);
         }
-        markIncrementsOfFoundPrimeAsNotPrime.call(this);
-        firstUnknownIndex = getFirstElementWithState(this.candidates, CandidateStates.UNKNOWN);
     }
+    
+    markFirstUnknownCandidatePrime.call(this);
     markAllUnknownsAsPrimes(this.candidates);
 }
 
